@@ -66,46 +66,76 @@ class Reviewer(Mentor):
                 student.grades[course] = [grade]
         else:
             return "Ошибка: либо курс не совпадает, либо объект не является студентом."
+# Функция для подсчета средней оценки за домашние задания по студентам
+def calculate_students_average(students, course):
+    total_grades = []
+    for student in students:
+        if course in student.grades:
+            total_grades.extend(student.grades[course])
+    return sum(total_grades) / len(total_grades) if total_grades else 0
 
-# Пример использования:
-best_student = Student('Ruoy', 'Eman', 'male')
-best_student.courses_in_progress += ['Python', 'Git']
-best_student.finished_courses += ['Введение в программирование']
+# Функция для подсчета средней оценки за лекции лекторов
+def calculate_lecturers_average(lecturers, course):
+    total_grades = []
+    for lecturer in lecturers:
+        if course in lecturer.grades:
+            total_grades.extend(lecturer.grades[course])
+    return sum(total_grades) / len(total_grades) if total_grades else 0
 
-second_student = Student('Anna', 'Smith', 'female')
-second_student.courses_in_progress += ['Python']
-second_student.finished_courses += ['Math']
+# Создание объектов классов
+student1 = Student('Alice', 'Johnson', 'female')
+student1.courses_in_progress += ['Python']
+student1.finished_courses += ['Math']
 
-cool_reviewer = Reviewer('Some', 'Buddy')
-cool_reviewer.courses_attached += ['Python']
+student2 = Student('Bob', 'Smith', 'male')
+student2.courses_in_progress += ['Python', 'Git']
+student2.finished_courses += ['Physics']
 
-cool_lecturer = Lecturer('John', 'Doe')
-cool_lecturer.courses_attached += ['Python']
+reviewer1 = Reviewer('John', 'Reviewer')
+reviewer1.courses_attached += ['Python']
 
-second_lecturer = Lecturer('Jane', 'Doe')
-second_lecturer.courses_attached += ['Python']
+reviewer2 = Reviewer('Jane', 'Reviewer')
+reviewer2.courses_attached += ['Git']
 
-# Рецензент оценивает студентов
-cool_reviewer.rate_hw(best_student, 'Python', 10)
-cool_reviewer.rate_hw(best_student, 'Python', 9)
-cool_reviewer.rate_hw(second_student, 'Python', 8)
+lecturer1 = Lecturer('Dr.', 'Lecturer1')
+lecturer1.courses_attached += ['Python']
 
-# Студенты оценивают лекторов
-best_student.rate_lecturer(cool_lecturer, 'Python', 9)
-best_student.rate_lecturer(cool_lecturer, 'Python', 10)
+lecturer2 = Lecturer('Dr.', 'Lecturer2')
+lecturer2.courses_attached += ['Git']
 
-second_student.rate_lecturer(second_lecturer, 'Python', 8)
-second_student.rate_lecturer(second_lecturer, 'Python', 7)
+# Оценки от рецензентов
+reviewer1.rate_hw(student1, 'Python', 10)
+reviewer1.rate_hw(student1, 'Python', 8)
+reviewer1.rate_hw(student2, 'Python', 7)
+
+reviewer2.rate_hw(student2, 'Git', 9)
+reviewer2.rate_hw(student2, 'Git', 8)
+
+# Оценки от студентов лекторам
+student1.rate_lecturer(lecturer1, 'Python', 9)
+student1.rate_lecturer(lecturer1, 'Python', 10)
+
+student2.rate_lecturer(lecturer1, 'Python', 8)
+student2.rate_lecturer(lecturer2, 'Git', 7)
 
 # Вывод информации
-print(best_student)
-print(second_student)
-print(cool_reviewer)
-print(cool_lecturer)
-print(second_lecturer)
+print(student1)
+print(student2)
+print(reviewer1)
+print(reviewer2)
+print(lecturer1)
+print(lecturer2)
 
-# Сравнение студентов
-print(f"Best student has higher average grade: {best_student > second_student}")
+# Сравнение студентов и лекторов
+print(f"Student1 has higher average grade than Student2: {student1 > student2}")
+print(f"Lecturer1 has higher average grade than Lecturer2: {lecturer1 > lecturer2}")
 
-# Сравнение лекторов
-print(f"Cool lecturer has higher average grade: {cool_lecturer > second_lecturer}")
+# Подсчет средней оценки за домашние задания
+students = [student1, student2]
+lecturers = [lecturer1, lecturer2]
+
+average_student_grade_python = calculate_students_average(students, 'Python')
+average_lecturer_grade_python = calculate_lecturers_average(lecturers, 'Python')
+
+print(f"Average grade for Python (students): {average_student_grade_python:.2f}")
+print(f"Average grade for Python (lecturers): {average_lecturer_grade_python:.2f}")
